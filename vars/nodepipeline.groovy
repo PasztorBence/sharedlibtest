@@ -11,7 +11,7 @@ def call(body){
         stage('Build'){
             configFileProvider([configFile(fileId: '2f0b42a7-b4e0-442c-b0b2-09e6792a3ac0', targetLocation: '.npmrc')]) {}
             sh 'npm install --registry=https://registry.npmjs.org/'
-          echo "${text}"
+            echo "${text}"
         }
         stage('Test'){
             sh 'npm test'
