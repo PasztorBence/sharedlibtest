@@ -8,8 +8,9 @@ def call(body) {
             git branch: 'main', url: 'https://github.com/PasztorBence/mavenpipelinetest.git'
         }
         stage('Build/Publish') {
+            mavenPom = readMavenPom 'pom.xml'
             withMaven(jdk: 'jdk8', mavenSettingsConfig: '8cc2cb63-74a8-4de8-937e-938ca4b32dc9') {
-                sh 'mvn clean deploy'
+                sh 'mvn clean deploy -Dversion=${mavenPom.version}'
             }
         }
         stage('Docker image Build') {
