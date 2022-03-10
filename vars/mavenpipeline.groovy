@@ -6,7 +6,7 @@ def call(body) {
     properties([parameters([booleanParam(description: 'release-e', name: 'isRealease')])])
     node('vbox-slave') {
         boolean isReleaseBuild
-        stage('prepare'){
+        stage('Prepare'){
             try{
             isReleaseBuild = Boolean.parseBoolean(isRealease)
             } catch(MissingPropertyException e){
