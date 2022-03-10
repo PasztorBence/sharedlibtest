@@ -5,13 +5,21 @@ def call(body) {
     body()
     properties([parameters([booleanParam(description: 'release-e', name: 'isRealease')])])
     node('vbox-slave') {
+        boolean isReleaseBuild
+        stage('prepare'){
+            try{
+            isReleaseBuild = Boolean.parseBoolean(isRealease)
+            } catch(MissingPropertyException e){
+            isReleaseBuild = false
+            }
+        }
         stage('Repository Clone') {
             git branch: 'main', url: 'https://github.com/PasztorBence/mavenpipelinetest.git'
         }
         stage('Build/Publish') {
             def mavenPom = readMavenPom file: 'pom.xml'
             withMaven(jdk: 'jdk8', mavenSettingsConfig: '8cc2cb63-74a8-4de8-937e-938ca4b32dc9') {
-                if(isRelease){
+                if(isReleaseBuild){
                     def version = mavenPom.version
                     def versionWithoutSnap = version.replace("-SNAPSHOT", "")
                     sh "mvn versions:set -DnewVersion=${versionWithoutSnap}"
