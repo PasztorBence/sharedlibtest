@@ -3,6 +3,7 @@ def call(body) {
     body.resolveStrategy = Closure.DELEGATE_FIRST
     body.delegate = config
     body()
+    properties([parameters([booleanParam(description: 'release-e', name: 'isRealease')])])
     node('vbox-slave') {
         stage('Repository Clone') {
             git branch: 'main', url: 'https://github.com/PasztorBence/mavenpipelinetest.git'
@@ -10,10 +11,9 @@ def call(body) {
         stage('Build/Publish') {
             def mavenPom = readMavenPom file: 'pom.xml'
             withMaven(jdk: 'jdk8', mavenSettingsConfig: '8cc2cb63-74a8-4de8-937e-938ca4b32dc9') {
-                if(!isSnapshot){
+                if(isRelease){
                     def version = mavenPom.version
                     def versionWithoutSnap = version.replace("-SNAPSHOT", "")
-                    writeMavenPom model: mavenPom
                     sh "mvn versions:set -DnewVersion=${versionWithoutSnap}"
                 }
                 sh "mvn clean deploy"
