@@ -11,10 +11,10 @@ def call(body) {
             def mavenPom = readMavenPom file: 'pom.xml'
             withMaven(jdk: 'jdk8', mavenSettingsConfig: '8cc2cb63-74a8-4de8-937e-938ca4b32dc9') {
                 if(isSnapshot){
-                    pom.version = "${mavenPom.version}-SNAPSHOT"
+                    mavenPom.version = "${mavenPom.version}-SNAPSHOT"
                     sh "mvn clean deploy"
                 } else {
-                    pom.version = "${mavenPom.version}"
+                    mavenPom.version = "${mavenPom.version}"
                     sh "mvn clean deploy" 
                 }
             }
