@@ -13,12 +13,11 @@ def call(body) {
                 if(isSnapshot){
                     mavenPom.version = "${mavenPom.version}-SNAPSHOT"
                     writeMavenPom model: mavenPom
-                    sh "mvn clean deploy"
                 } else {
                     mavenPom.version = "${mavenPom.version}"
-                    writeMavenPom model: mavenPom
-                    sh "mvn clean deploy" 
+                    writeMavenPom model: mavenPom 
                 }
+                sh "mvn clean deploy"
             }
         }
         stage('Docker image Build') {
