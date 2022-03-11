@@ -30,8 +30,5 @@ def call(body) {
         stage('Docker image Build') {
             dockerbuild('mavenpipelinetest')
         }
-        stage('Docker Publish') {
-            sh 'docker push 192.168.0.105:8085/mavenpipelinetest:latest'
-        }
     }
 }
